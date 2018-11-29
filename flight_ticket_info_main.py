@@ -72,3 +72,53 @@ for i in flight_list_expedia:
 
 all_flight_expedia
 
+
+# In[32]:
+
+
+# Search hotwire
+url_hotwire = 'https://vacation.hotwire.com/Flights-Search?tmid=21580175849&trip=OneWay&leg1=from:NYC,to:CDG,departure:02/14/2019TANYT&passengers=children:0,adults:1,seniors:0,infantinlap:Y&options=sortby:price&mode=search&paandi=true'
+response_hotwire = requests.get(url_hotwire)
+response_hotwire.status_code
+
+
+# In[33]:
+
+
+results_page_hotwire = BeautifulSoup(response_hotwire.content,'lxml')
+print(results_page_hotwire.prettify())
+
+
+# In[47]:
+
+
+flight_list_hotwire = results_page_hotwire.find_all('li',{'class':'flight-module segment offer-listing '})
+len(flight_list_hotwire)#[2].find_all('span')[6].get('data-test-num-stops')
+
+
+# In[48]:
+
+
+all_flight_hotwire = []
+
+for i in flight_list_hotwire:
+    price = i.find('h3').get_text()
+    price = float(price[price.find('$')+1:])
+    if price <= budget:
+        depart_time = i.find('span',{'data-test-id':"departure-time"}).get_text()
+        arrival_time = i.find('span',{'data-test-id':"arrival-time"}).get_text()
+        stop = i.find_all('span')[6].get('data-test-num-stops')
+        airline = i.find('div',{'data-test-id':"airline-name"}).get_text().strip()
+        depart_airport = i.find('div',{'data-test-id':"flight-info"}).get_text().split()[2]
+        arrival_airport = i.find('div',{'data-test-id':"flight-info"}).get_text().split()[-1]
+        # continuing websites on Hotwire is kind of random, so here we return search link.
+        link = url_hotwire
+        flight = (airline,depart_airport,arrival_airport,depart_time,arrival_time,stop,price,link)
+        all_flight_hotwire.append(flight)    
+
+
+# In[49]:
+
+
+all_flight_hotwire
+
