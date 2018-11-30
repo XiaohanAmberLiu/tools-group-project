@@ -14,9 +14,9 @@ url=get_main_url('Paris--France','1','0','2019-02-14','2019-02-21')
 url
 
 
-# In[12]:
+# In[26]:
 
-def get_onepage_info(url): 
+def get_page_info(url,page_total_num=1): 
     from selenium import webdriver
     from selenium.webdriver.common.keys import Keys
     from selenium.webdriver.chrome.options import Options
@@ -31,63 +31,70 @@ def get_onepage_info(url):
     except:
         return "Connection Failure"
 
-    driver.implicitly_wait(10)
-    Hotels=driver.find_elements_by_class_name('_qlq27g')
+    page=1
     result=list()
-    for Hotel in Hotels:
-        #get hotel url
-        try:
-            link=Hotel.find_elements_by_tag_name('a')
-            l=link[0].get_attribute('href')
-        except:
-            l=""
+    while page<=page_total_num:
+        driver.implicitly_wait(5)
+        Hotels=driver.find_elements_by_class_name('_qlq27g')
+        for Hotel in Hotels:
+            #get hotel url
+            try:
+                link=Hotel.find_elements_by_tag_name('a')
+                l=link[0].get_attribute('href')
+            except:
+                l=""
 
-        #get hotel name
-        try:
-            name=Hotel.find_elements_by_class_name('_2izxxhr')
-            n=name[0].text
-        except:
-            n=""
+            #get hotel name
+            try:
+                name=Hotel.find_elements_by_class_name('_2izxxhr')
+                n=name[0].text
+            except:
+                n=""
 
-        #get hotel description
-        try:
-            Descrips=Hotel.find_elements_by_class_name('_1nhodd4u')
-            d=""
-            for Descrip in Descrips:
-                d += ' · ' + Descrip.text
-        except:
-            d=""
+            #get hotel description
+            try:
+                Descrips=Hotel.find_elements_by_class_name('_1nhodd4u')
+                d=""
+                for Descrip in Descrips:
+                    d += ' · ' + Descrip.text
+            except:
+                d=""
 
-         #get hotel price in total
-        try:
-            Price=Hotel.find_elements_by_class_name('_p1g77r')
-            p=re.search(r'\d+',Price[0].text).group()
-        except:
-            p=""
+             #get hotel price in total
+            try:
+                Price=Hotel.find_elements_by_class_name('_p1g77r')
+                p=re.search(r'\d+',Price[0].text).group()
+            except:
+                p=""
 
-        #rating
-        try:
-            rating=Hotel.find_elements_by_class_name('_q27mtmr')
-            ra=rating[0].find_elements_by_tag_name('span')
-            r=ra[0].get_attribute('aria-label')
-        except:
-            r=""
+            #rating
+            try:
+                rating=Hotel.find_elements_by_class_name('_q27mtmr')
+                ra=rating[0].find_elements_by_tag_name('span')
+                r=ra[0].get_attribute('aria-label')
+            except:
+                r=""
 
-        ##num of reviews
-        try:
-            review=Hotels[0].find_elements_by_class_name('_1m8bb6v')
-            for x in review:
-                temp=re.match(r'\d+',x.text)
-                if temp:
-                    rev=temp.group()
-        except:
-            rev=""
+            ##num of reviews
+            try:
+                review=Hotels[0].find_elements_by_class_name('_1m8bb6v')
+                for x in review:
+                    temp=re.match(r'\d+',x.text)
+                    if temp:
+                        rev=temp.group()
+            except:
+                rev=""
 
-        result.append((n,p,r,rev,d,l))
+            result.append((n,p,r,rev,d,l))
+            
+        page += 1  
+        driver.find_element_by_class_name('_1rltvky').click()
+        driver.refresh()
+                                
     return result
 
 
-# In[13]:
+# In[ ]:
 
-get_onepage_info(url)
+get_page_info(url,2)
 
