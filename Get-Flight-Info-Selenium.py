@@ -81,3 +81,20 @@ while i < len(airport_name):
 temp
 #airport_name[0][1].text
 
+
+# In[92]:
+
+
+price=driver.find_elements_by_class_name('FlightPrice')
+price_number=list()
+for name in price:
+    price_number.append(name.find_elements_by_tag_name('div'))
+    
+print(len(price_number))
+i=0
+temp=list()
+while i < len(price_number):
+    temp.append(price_number[i][0].text)
+    i+=1
+temp
+
