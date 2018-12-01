@@ -89,7 +89,7 @@ def get_page_info(url,budget,page_total_num=1):
                     continue
                 
             except:
-                continue
+                pass
                   
         page += 1  
         driver.find_element_by_class_name('_1rltvky').click()
