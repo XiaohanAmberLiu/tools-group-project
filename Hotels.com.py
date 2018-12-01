@@ -10,7 +10,7 @@ cktout = '2019-02-21'
 rooms = '1'
 adults = '2'
 children = '0'
-url of hotel.com = "https://www.hotels.com/search.do?3A504261%3AUNKNOWN%3AUNKNOWN&q-destination="+city+"&q-check-in="+cktin+"&q-check-out="+cktout+"&q-rooms="+rooms+"&q-room-0-adults="+adults+"&q-room-0-children="+children+""
+url = "https://www.hotels.com/search.do?3A504261%3AUNKNOWN%3AUNKNOWN&q-destination="+city+"&q-check-in="+cktin+"&q-check-out="+cktout+"&q-rooms="+rooms+"&q-room-0-adults="+adults+"&q-room-0-children="+children+""
 url
 
 
