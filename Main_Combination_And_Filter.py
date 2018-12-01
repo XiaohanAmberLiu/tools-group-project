@@ -209,7 +209,7 @@ all_flight_hotwire_re = get_flight_hotwire_re(arrival,arrival_country,arrival_co
 all_flight_hotwire_re
 
 
-# In[27]:
+# In[82]:
 
 
 # Get Flight Info on Priceline
@@ -217,7 +217,7 @@ all_flight_hotwire_re
 # Generate flight search URL
 def get_flight_priceline(arrival_code,depart_code,start_time,end_time,people,budget):
     url_priceline = 'https://www.priceline.com/m/fly/search/'+depart_code+'-'+arrival_code+'-'+start_time[2]+start_time[0]+start_time[1]+'/'+arrival_code+'-'+depart_code+'-'+end_time[2]+end_time[0]+end_time[1]+'/?cabin-class=ECO&no-date-search=false&search-type=1111&num-adults='+people
-
+    print(url_priceline)
     # Start Scraping
     browser_priceline = webdriver.Chrome()
     browser_priceline.get(url_priceline)
@@ -225,13 +225,19 @@ def get_flight_priceline(arrival_code,depart_code,start_time,end_time,people,bud
         browser_priceline.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
     flight_list_priceline = browser_priceline.find_elements_by_class_name('sc-jdfcpN')
-
+    print(flight_list_priceline)
     all_flight_priceline = []
     all_flight_priceline_re = []
 
     for i in flight_list_priceline:
         # Note that on Priceline, the price is the total price of the round-trip flight.
-        price = i.find_elements_by_xpath(".//*[@data-test='rounded-dollars']")[0].text
+        price = i.find_element_by_xpath(".//*[@data-test='rounded-dollars']").text
+
+#         try:
+#             price = i.find_element_by_xpath(".//*[@data-test='rounded-dollars']")[0].text
+#         except:
+#             break
+#             ('Robot Check! Please try again later.')
 
         if float(price) <= budget:
             depart_airport = i.find_elements_by_xpath(".//*[@data-test='left-airport-code']")[0].text
@@ -255,10 +261,25 @@ def get_flight_priceline(arrival_code,depart_code,start_time,end_time,people,bud
 #     print(all_flight_priceline)
 #     print(all_flight_priceline_re)
     browser_priceline.close()
+    if all_flight_priceline ==[]:
+        raise ValueError('Robot Check! Please try again later.')
+        
     return all_flight_priceline,all_flight_priceline_re
 
 
-# In[30]:
+# In[83]:
+
+
+all_flight_priceline,all_flight_priceline_re = get_flight_priceline(arrival_code,depart_code,start_time,end_time,people,budget)
+
+
+# In[67]:
+
+
+all_flight_priceline,all_flight_priceline_re
+
+
+# In[49]:
 
 
 # Get Flight Info on Hipmunk
@@ -309,6 +330,53 @@ def get_flight_hipmunk(departure,arrival,start_time,end_time):
 
 all_flight_hipmunk = get_flight_hipmunk(departure,arrival,start_time,end_time)
 all_flight_hipmunk
+
+
+# In[54]:
+
+
+def get_flight_hipmunk_re(departure,arrival,start_time,end_time):
+
+    url_re= 'https://www.hipmunk.com/flights#f='+departure+';t='+arrival+';d='+start_time[2]+'-'+start_time[0]+'-'+start_time[1]+';r='+end_time[2]+'-'+end_time[0]+'-'+end_time[1]+';is_search_for_business=false;group=1'
+    chrome_options = Options()
+    chrome_options.add_argument('--headless')
+    driver_re=webdriver.Chrome()
+    driver_re.get(url_re)
+    driver_re.implicitly_wait(10)
+    for _ in range(100):
+        driver_re.execute_script("window.scrollTo(0, document.body.scrollHeight);")
+    
+    flight_list_priceline_re=driver_re.find_elements_by_xpath("//div[@class='FlightResultsListItem FlightRowDesktop']")
+    all_flight_priceline_re=[]
+
+    for i in flight_list_priceline_re:
+        price_number_re=i.find_element_by_class_name('FlightPrice').text
+        price_re =int(re.findall("\d+",price_number_re)[0])
+    
+        if price_re<= budget:
+        #assume a budget
+            airports_re=i.find_elements_by_class_name('FlightRowMiddleColumn__airports')[0].text
+            split_airports_re=airports_re.split(' → ')
+            depart_airport_re = str(split_airports_re[0])
+            arrival_airport_re = str(split_airports_re[1])
+            times_re=i.find_elements_by_class_name('flight-tab-routing-info-popup__routing-times')[0].text
+            split_times_re=times_re.split('–')
+            depart_time_re=str(split_times_re[0])
+            arrival_time_re=str(split_times_re[1])
+            airline_re=i.find_elements_by_class_name('FlightRowLeftColumn__airline-name')[0].text
+            stop_re='NA'
+            link_re=url_re
+            flight=(airline_re,depart_airport_re,arrival_airport_re,depart_time_re,arrival_time_re,stop_re,price_re,link_re)
+            all_flight_priceline_re.append(flight)
+    driver_re.close()
+    return all_flight_priceline_re
+
+
+# In[55]:
+
+
+all_flight_hipmunk_re = get_flight_hipmunk_re(departure,arrival,start_time,end_time)
+all_flight_hipmunk_re
 
 
 # In[32]:
@@ -637,7 +705,7 @@ hotel_booking = get_booking_list('Paris',int(people),int(children),
 hotel_booking
 
 
-# In[ ]:
+# In[42]:
 
 
 ########## STEP 4 Combine and Filter Hotels and Flights ##########
@@ -649,6 +717,7 @@ def get_all_depart_flight():
     # First combine all flights
     all_flight.extend(all_flight_expedia)
     all_flight.extend(all_flight_hotwire)
+    all_flight.extend(all_flight_hipmunk)
     # For the same flights, keep the cheaper one.
     for i in all_flight:
         same = False
@@ -671,6 +740,7 @@ def get_all_return_flight():
     # First combine all flights
     all_flight.extend(all_flight_expedia_re)
     all_flight.extend(all_flight_hotwire_re)
+    all_flight.extend(all_flight_hipmunk_re)
     # For the same flights, keep the cheaper one.
     for i in all_flight:
         same = False
@@ -688,7 +758,7 @@ def get_all_return_flight():
     return flight_list
 
 
-# In[ ]:
+# In[43]:
 
 
 # Combine all hotel info
@@ -714,7 +784,7 @@ def get_all_hotels():
     return hotel_list
 
 
-# In[ ]:
+# In[44]:
 
 
 # Combine flights and hotels, then generate qualified packages.
@@ -739,14 +809,20 @@ def priceline_package(departflights,returnflights,hotels):
     return packages
 
 
-# In[ ]:
+# In[84]:
 
 
 all_packages = possible_package(get_all_depart_flight(),get_all_return_flight(),
                                 get_all_hotels()) + priceline_package(all_flight_priceline,all_flight_priceline_re,get_all_hotels())
 
 
-# In[ ]:
+# In[91]:
+
+
+len(priceline_package(all_flight_priceline,all_flight_priceline_re,get_all_hotels()))
+
+
+# In[85]:
 
 
 print(len(all_packages))
@@ -760,4 +836,10 @@ columns = ['depart airline','depart airport1','depart airport2','depart flight d
            'hotel name','hotel price','rating','comments','description','hotel link','total package price']
 df_packages = pd.DataFrame(all_packages,columns=columns)
 df_packages
+
+
+# In[86]:
+
+
+len(df_packages)
 
