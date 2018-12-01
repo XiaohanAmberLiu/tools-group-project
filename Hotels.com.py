@@ -45,6 +45,10 @@ for hotel in hotels:
     review = hotel.find_elements_by_class_name('guest-reviews')[0].text
     link = hotel.find_elements_by_tag_name('a')[0].get_attribute('href')
     hotel_list.append((name,address,review,link,#price))
+                      
+for hotel_sponsored in hotels_sponsored:
+
+for hotel_vip in hotels_vip:                       
 
 #old version codes as follows
                        
