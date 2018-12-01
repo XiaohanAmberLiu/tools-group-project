@@ -350,3 +350,88 @@ hotel_airbnb
 
 ########## STEP 4 Combine and Filter ##########
 
+# Combine all flight info (except Priceline)
+def get_all_depart_flight():
+    flight_list = []
+    all_flight = []
+    # First combine all flights
+    all_flight.extend(all_flight_expedia)
+    all_flight.extend(all_flight_hotwire)
+    # For the same flights, keep the cheaper one.
+    for i in all_flight:
+        same = False
+        for j in flight_list:
+            if j[0]==i[0] and j[1]==i[1] and j[2]==i[2] and j[3]==i[3] and j[4]==i[4]:
+                same = True
+                if i[6]<j[6]:
+                    flight_list.remove(j)
+                    flight_list.append(i)
+                    break
+                elif:
+                    break
+        if same == False:
+            flight_list.append(i)
+    return flight_list
+            
+def get_all_return_flight():
+    flight_list = []
+    all_flight = []
+    # First combine all flights
+    all_flight.extend(all_flight_expedia_re)
+    all_flight.extend(all_flight_hotwire_re)
+    # For the same flights, keep the cheaper one.
+    for i in all_flight:
+        same = False
+        for j in flight_list:
+            if j[0]==i[0] and j[1]==i[1] and j[2]==i[2] and j[3]==i[3] and j[4]==i[4]:
+                same = True
+                if i[6]<j[6]:
+                    flight_list.remove(j)
+                    flight_list.append(i)
+                    break
+                elif:
+                    break
+        if same == False:
+            flight_list.append(i)
+    return flight_list
+
+
+# In[ ]:
+
+
+# Combine all hotel info
+def get_all_hotels():
+    hotel_list = []
+    all_hotel = []
+    all_hotel.extend(hotel_airbnb)
+    
+    for i in all_hotel:
+        same = False
+        for j in hotel_list:
+            if j[0]==i[0]:
+                same = True
+                if i[1]<j[1]:
+                    hotel_list.remove(j)
+                    hotel_list.append(i)
+                    break
+                elif:
+                    break
+        if same == False:
+            hotel_list.append(i)
+    return hotel_list
+
+
+# In[ ]:
+
+
+def possible_package(departflights,returnflights,hotels):
+    packages = []
+    for i in departflights:
+        for j in returnflights:
+            for h in hotels:
+                if i[6]+j[6]+h[1]<=budget:
+                    packages.append([i,j,h])
+    return packages
+                    
+    
+
