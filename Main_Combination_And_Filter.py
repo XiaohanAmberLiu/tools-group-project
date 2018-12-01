@@ -345,7 +345,13 @@ hotel_airbnb = get_airbnb_list(arrival,people,children,start_time[2]+'-'+start_t
 hotel_airbnb
 
 
-# In[ ]:
+# In[45]:
+
+
+len(hotel_airbnb)
+
+
+# In[37]:
 
 
 ########## STEP 4 Combine and Filter ##########
@@ -367,7 +373,7 @@ def get_all_depart_flight():
                     flight_list.remove(j)
                     flight_list.append(i)
                     break
-                elif:
+                else:
                     break
         if same == False:
             flight_list.append(i)
@@ -389,14 +395,14 @@ def get_all_return_flight():
                     flight_list.remove(j)
                     flight_list.append(i)
                     break
-                elif:
+                else:
                     break
         if same == False:
             flight_list.append(i)
     return flight_list
 
 
-# In[ ]:
+# In[38]:
 
 
 # Combine all hotel info
@@ -414,24 +420,57 @@ def get_all_hotels():
                     hotel_list.remove(j)
                     hotel_list.append(i)
                     break
-                elif:
+                else:
                     break
         if same == False:
             hotel_list.append(i)
     return hotel_list
 
 
-# In[ ]:
+# In[61]:
 
 
+# Combine flights and hotels, then generate qualified packages.
 def possible_package(departflights,returnflights,hotels):
     packages = []
     for i in departflights:
         for j in returnflights:
             for h in hotels:
-                if i[6]+j[6]+h[1]<=budget:
-                    packages.append([i,j,h])
+                package_price = i[6]+j[6]+h[1]
+                if package_price<=float(budget):
+                    packages.append(list(i)+list(j)+list(h)+[package_price])
     return packages
-                    
-    
+
+# Priceline only offer total, so we generate a special function for Priceline
+def priceline_package(departflights,returnflights,hotels):
+    packages = []
+    for i in range(len(departflights)):
+            for h in hotels:
+                package_price = float(departflights[i][6])+float(returnflights[i][6])+h[1]
+                if package_price<=float(budget):
+                    packages.append(list(departflights[i])+list(returnflights[i])+list(h)+[package_price])
+    return packages
+
+
+# In[62]:
+
+
+all_packages = possible_package(get_all_depart_flight(),get_all_return_flight(),
+                                get_all_hotels()) + priceline_package(all_flight_priceline,all_flight_priceline_re,get_all_hotels())
+
+
+# In[63]:
+
+
+print(len(all_packages))
+#all_packages
+import pandas as pd
+import numpy as np
+columns = ['depart airline','depart airport1','depart airport2','depart flight depart time','depart flight arrival time',
+          'depart flight stops','depart flight price','depart flight link',
+           'arrival airline','arrival airport1','arrival airport2','arrival flight depart time','arrival flight arrival time',
+          'arrival flight stops','arrival flight price','arrival flight link',
+           'hotel name','hotel price','rating','comments','description','hotel link','total package price']
+df_packages = pd.DataFrame(all_packages,columns=columns)
+df_packages
 
