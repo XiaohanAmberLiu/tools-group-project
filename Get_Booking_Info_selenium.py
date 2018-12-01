@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[6]:
+# In[8]:
 
 #send basic info to booking
 def set_basic_info(destination,adult_num,child_num,cktin_date,cktout_date):
@@ -11,7 +11,7 @@ def set_basic_info(destination,adult_num,child_num,cktin_date,cktout_date):
     from selenium.webdriver.support.ui import Select
     import re
     import time
-    import re
+
     
     url='https://www.booking.com/'
     
@@ -85,6 +85,12 @@ def set_basic_info(destination,adult_num,child_num,cktin_date,cktout_date):
     
         if (adult_web!=adult_num) or (child_web!=child_num):
             try:
+                select_a = Select(driver.find_element_by_name('group_adults'))
+                select_a.select_by_value(str(adult_num))
+                select_c = Select(driver.find_element_by_name('group_children'))
+                select_c.select_by_value(str(child_num))
+                break
+            except:
                 if adult_web>adult_num:
                     sub_button[0].click()
                 elif adult_web<adult_num:
@@ -93,15 +99,7 @@ def set_basic_info(destination,adult_num,child_num,cktin_date,cktout_date):
                 if child_web>child_num:
                     sub_button[1].click()
                 elif child_web<child_num:
-                    add_button[1].click()
-            except:
-                select_a = Select(driver.find_element_by_name('group_adults'))
-                select_a.select_by_value(str(adult_num))
-                select_c = Select(driver.find_element_by_name('group_children'))
-                select_c.select_by_value(str(child_num))
-                break
-                
-                
+                    add_button[1].click()      
         else:
             break
     
@@ -112,97 +110,99 @@ def set_basic_info(destination,adult_num,child_num,cktin_date,cktout_date):
     return driver
 
 
-# In[7]:
+# In[11]:
+
+def get_page_info(driver,budget,page_total_num=1):  
+    import re
+    from selenium import webdriver
+    page=1
+    result=list()
+    while page<=page_total_num:
+        driver.implicitly_wait(10)
+        Hotels=driver.find_elements_by_xpath("//div[@class='sr_item_content sr_item_content_slider_wrapper ']")
+        for Hotel in Hotels:
+            #get hotel price in total
+            try:
+                Price=Hotel.find_elements_by_tag_name('strong')
+                pr=Price[0].text
+
+                #delete the ',' in price
+                pr=pr.replace(',','')
+                p=int(re.search(r'\d+',pr).group())
+
+                if p<=budget:
+                    #get hotel url
+                    try:
+                        link=Hotel.find_elements_by_xpath("//a[@class='hotel_name_link url']")
+                        l=link[0].get_attribute('href')
+                    except:
+                        l=""
+
+                    #get hotel name
+                    try:
+                        name=Hotel.find_elements_by_class_name('sr-hotel__name')
+                        n=name[0].text
+                    except:
+                        n=""
+
+                    #get hotel description
+                    try:
+                        Descrips=Hotel.find_elements_by_class_name('room_link')
+                        d=Descrips[0].text
+                        d=d.replace('\n',' · ')
+                    except:
+                        d=""
+
+                    #rating
+                    try:
+                        rating=Hotel.find_elements_by_class_name('bui-review-score__badge')
+                        r=rating[0].text
+                    except:
+                        r=""
+
+                    ##num of reviews
+                    try:
+                        review=Hotel.find_elements_by_class_name('bui-review-score__text')
+                        rev=re.match(r'\d+',review[0].text.replace(',','')).group()
+
+                    except:
+                        rev=""
+
+                    result.append((n,p,r,rev,d,l))
+                else:
+                    continue
+
+            except:
+                pass
+
+        page += 1  
+        driver.find_element_by_xpath("//li[@class='bui-pagination__item bui-pagination__next-arrow']").click()
+        driver.refresh()
+
+    #driver.close()
+    return result
+
+
+
+# In[12]:
+
+def get_booking_list(destination,adult_num,child_num,cktin_date,cktout_date,budget):
+    driver=set_basic_info(destination,adult_num,child_num,cktin_date,cktout_date)
+    return get_page_info(driver,budget,page_total_num=2)
+
+
+# In[15]:
 
 #destination,adult_num,child_num,cktin_date,cktout_date,budget
 cktin_date='2019-02-14'
 cktout_date='2019-02-21'
-adult_num=1
+adult_num=2
 child_num=0
 destination='Paris'
-driver=set_basic_info(destination,adult_num,child_num,cktin_date,cktout_date)
+get_booking_list(destination,adult_num,child_num,cktin_date,cktout_date,1000)
 
 
-# In[5]:
-
-#def get_page_info(url,budget,page_total_num=1): 
-
-budget=1000
-page_total_num=1
+# In[ ]:
 
 
-page=1
-result=list()
-while page<=page_total_num:
-    driver.implicitly_wait(10)
-    Hotels=driver.find_elements_by_xpath("//div[@class='sr_item_content sr_item_content_slider_wrapper ']")
-    for Hotel in Hotels:
-        #get hotel price in total
-        try:
-            Price=Hotel.find_elements_by_tag_name('strong')
-            pr=Price[0].text
-
-            #delete the ',' in price
-            pr=pr.replace(',','')
-            p=int(re.search(r'\d+',pr).group())
-            print(p)
-
-#             if p<=budget:
-#                 #get hotel url
-#                 try:
-#                     link=Hotel.find_elements_by_xpath("//a[@class='hotel_name_link url']")
-#                     l=link[0].get_attribute('href')
-#                 except:
-#                     l=""
-
-#                 #get hotel name
-#                 try:
-#                     name=Hotel.find_elements_by_class_name('sr-hotel__name')
-#                     n=name[0].text
-#                 except:
-#                     n=""
-
-#                 #get hotel description
-#                 try:
-#                     Descrips=Hotel.find_elements_by_class_name('room_link')
-#                     d=Descrips[0].text
-#                     d=d.replace('\n',' · ')
-#                 except:
-#                     d=""
-
-#                 #rating
-#                 try:
-#                     rating=Hotel.find_elements_by_class_name('bui-review-score__badge')
-#                     r=rating[0].text
-#                 except:
-#                     r=""
-
-#                 ##num of reviews
-#                 try:
-#                     review=Hotel.find_elements_by_class_name('bui-review-score__text')
-#                     rev=re.match(r'\d+',review[0].text.replace(',','')).group()
-
-#                 except:
-#                     rev=""
-                    
-#                 result.append((n,p,r,rev,d,l))
-#             else:
-#                 continue
-
-        except:
-            continue
-
-    page += 1  
-    driver.find_element_by_xpath("//li[@class='bui-pagination__item bui-pagination__next-arrow']").click()
-    driver.refresh()
-
-# #driver.close()
-# result
-#return result
-
-
-
-# In[4]:
-
-driver.close()
 
