@@ -1,5 +1,5 @@
 # tools-group-project README
-### Description of the project
+### Description of the project:
 The goal of the project is to build a personalized recommendation system helping people who is planning travels find the best travel package consist of hotels and flights. The customer can input the place of departure, destination, start date, end date and budget, and the recommendation system can provide sorted travel packages including departure flght, return flight and hotel. There are 3 diffenrent ranking criterion when sorting travel packages which are total price of the package (1), rating of the hotel (2) and recommendation score (3).
 
 **The main steps**
@@ -21,13 +21,13 @@ The goal of the project is to build a personalized recommendation system helping
 
 
 ### Group name and Section:
-**Contributors (in random order)**
+**Contributors (in random order):**
 Mingshan Zhang (mz2701)
 Yue Li (yl4015)
 Xinyue Shi (xs2349)
 Xiaohan Liu (xl2838)
 
-**Section**
+**Section:**
 Sec 002
 
 
