@@ -15,8 +15,9 @@ The goal of the project is to build a personalized recommendation system helping
 3. Rank the packages by the recommendation score by assigning weight to price (20%), rating(40%), comment number(40%). 
 
 
-**About the reult**
-The result is printed in the form of data frame, and each row represents a travel package including the detailed information of the hotel, departing flight and return flight, each column represents a variable like airline, airport, time, hotel name, rating, comments, price, etc. The result is saved as pictures and can be accessed by the following link: link:https://pan.baidu.com/s/1KYrYCbO5GeW1QyyY9uVXoA  password:l9z8
+**About the result**
+1. The result is printed in the form of data frame, and each row represents a travel package including the detailed information of the hotel, departing flight and return flight, each column represents a variable like airline, airport, time, hotel name, rating, comments, price, etc. 
+2. The result is saved as pictures and can be accessed by the following link: link:https://pan.baidu.com/s/1KYrYCbO5GeW1QyyY9uVXoA  password:l9z8
 
 
 ### Group name and Section:
@@ -31,7 +32,7 @@ Sec 002
 
 
 ### Installation Instruction:
-# 1)	Installation
+1)	Installation
 Since expedia and hotwire are static web page in which python can use a combination of libraries as requests and BeautifulSoup. We need to get the BeautifulSoup library using pip, a package management tool for python.
 We type:
 
@@ -50,7 +51,7 @@ We type:
 
 ```
 
-# 2)	Import packages
+2)	Import packages
 
 ```
 from selenium import webdriver
