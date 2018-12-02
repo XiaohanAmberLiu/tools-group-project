@@ -58,9 +58,15 @@ def get_page_info(url,budget,page_total_num):
                     pass
                 reviews = hotel.find_elements_by_class_name('reviewCount')
                 try:
-                    review = reviews[1].text
+                    rev = reviews[1].text
                 except:
-                    review = ''
+                    rev = ''
+                        for x in rev:
+                            temp = re.match(r'\d+',x)
+                            if temp:
+                                review=temp.group()
+                            else:
+                                review=''
                 links = hotel.find_elements_by_xpath("//a[@class='flex-link']")
                 link = links[0].get_attribute('href')
                 result.append((name,price,rating,review,description,link))
