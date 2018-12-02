@@ -38,7 +38,32 @@ driver.implicitly_wait(10)
 
 
 # In[5]:
-
+result = list()
+hotels = driver.find_elements_by_class_name('info-and-price')
+for hotel in hotels:
+    link = hotel.find_elements_by_xpath("//a[@class='flex-link']")
+    link.href
+    #price = hotel.find_elements_by_class_name('actualPrice')[0].text
+    #p = int(re.search(r'\d+',price).group())
+    #if p <= budget:
+    #name = hotel.find_elements_by_class_name('hotelTitle')[0].text
+    #ratings = hotel.find_elements_by_class_name('starRating')
+    #try:
+        #rating = ratings[0].text
+    #except:
+        #pass
+    #rates = hotel.find_elements_by_class_name('reviewOverall')
+    #try:
+        #rating = rates[0].text
+    #except:
+        #pass
+ #reviews = hotel.find_elements_by_class_name('reviewCount')
+        #review = reviews[1].text
+        #for x in review:
+            #temp = re.match(r'\d+',x.text)
+            #if temp:
+                #rev=temp.group()
+            #link = hotel.find_elements_by_xpath("//a[@class='flex-link']")[0].get_attribute('href')
 
 names = driver.find_elements_by_class_name('hotelTitle')
 for name in names:
