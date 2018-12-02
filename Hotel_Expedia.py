@@ -3,18 +3,16 @@
 
 # In[1]:
 
-city = 'Paris'
-cktin_year = '2019'
-cktin_month = '02'
-cktin_day = '14'
-cktout_year = '2019'
-cktout_month = '02'
-cktout_day = '21'
-rooms = '1'
-adults = '2'
-children = '0'
-url = "https://www.expedia.com/Hotel-Search?destination="+city+"&startDate="+cktin_month+"%2F"+cktin_day+"%2F"+cktin_year+"&endDate="+cktout_month+"%2F"+cktout_day+"%2F"+cktout_year+"&rooms="+rooms+"&adults="+adults+""
-url
+def get_main_url(destination,adult_num,child_num,cktin_date,cktout_date):
+    rooms = '1'
+    cktin_month = cktin_date[5:7]
+    cktin_day = cktin_date[8:]
+    ckin_year = cktin_date[:4]
+    cktout_month = cktout_date[5:7]
+    cktout_day = cktout_date[8:]
+    cktout_year = cktout_date[:4]
+    url = "https://www.expedia.com/Hotel-Search?destination="+destination+"&startDate="+cktin_month+"%2F"+cktin_day+"%2F"+cktin_year+"&endDate="+cktout_month+"%2F"+cktout_day+"%2F"+cktout_year+"&rooms="+rooms+"&adults="+adult_num+""
+    return url
 
 
 # In[2]:
@@ -73,3 +71,9 @@ def get_page_info(url,budget,page_total_num):
     driver.close()
     return result
 
+def get_expedia_list(destination,adult_num,child_num,cktin_date,cktout_date,budget):
+    url = get_main_url(destination,adult_num,child_num,cktin_date,cktout_date)
+    return get_page_info(url,budget,page_total_num=10)
+
+#example:
+get_expedia_list('Paris','2','0','2019-02-14','2019-02-21',1000)
