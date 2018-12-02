@@ -806,7 +806,7 @@ def priceline_package(departflights,returnflights,hotels):
     return packages
 
 
-# In[98]:
+# In[108]:
 
 
 ########## STEP 5 Sorting #########
@@ -832,7 +832,7 @@ def normalization(df,m=1): #m=1=>(x-min)/(max-min); m=0 =>(max-x)/(max-min)
         return df.apply(lambda x: (mx-x)/(mx-mn))
 
 
-# In[99]:
+# In[134]:
 
 
 def generate_packages(passenger_info,sort = 0):
@@ -874,6 +874,7 @@ def generate_packages(passenger_info,sort = 0):
                'hotel name','hotel price','rating','comments','description','hotel link','total package price']
     df_packages = pd.DataFrame(all_packages,columns=columns)
     
+    
     import re
     df_packages['comments']=pd.to_numeric(df_packages['comments']) 
     #normalizae rating
@@ -882,7 +883,7 @@ def generate_packages(passenger_info,sort = 0):
     if sort==0:
         #sort by package price, hotel rating 
         result=df_packages.sort_values(by=['total package price','rating'],ascending=[True,False])
-    
+
     elif sort==1:
         #sort by hotel rating, price 
         result=df_packages.sort_values(by=['rating','total package price'],ascending=[False,True])
@@ -891,18 +892,18 @@ def generate_packages(passenger_info,sort = 0):
         #recommendation score weight: price 50%, Rating 30%, comments 20%
         df_packages['std_pkg_price']= normalization(df_packages['total package price'],m=0)
         df_packages['std_comments']= normalization(df_packages['comments'],m=1)
-        df_packages['recommend_score']=df_packages['std_pkg_price']*0.2  + df_packages['std_comments']*0.4+ df_packages['rating']*0.4
+        df_packages['recommend_score']=df_packages['std_pkg_price'].astype(float)*0.2 + df_packages['std_comments'].astype(float)*0.4+ df_packages['rating'].astype(float)*0.4
         result=df_packages.sort_values(by=['recommend_score'],ascending=False)
-    
+
     else:
         print('Sorry, we can not recognize the sorting condition. Please try again.')
-     
-    print('This is all the qualified sorted packages. Please choose one from them.')
+
+    print('Generated all the qualified sorted packages. Please choose one from them.')
     return result
   
 
 
-# In[100]:
+# In[117]:
 
 
 ###################### THIS IS THE INPUT #######################
@@ -919,7 +920,7 @@ def generate_packages(passenger_info,sort = 0):
 # sort = int(input('Please input the sorting method(0:by price,1:by rating,2:by recommendation):'))
 
 
-# In[101]:
+# In[128]:
 
 
 # For now, we take input as following for instance.
@@ -927,54 +928,29 @@ passenger_info = ['New York','United States of America','NYC','Paris','France','
 sort = 2
 
 
-# In[102]:
+# In[132]:
 
+
+################### Now we can generate packages by running this code only ####################
 
 results = generate_packages(passenger_info,sort)
 
-
-# In[ ]:
-
-
-df_backup = df_packages
-df_packages
-#len(df_packages)
+# Passengers can provide thier information by altering variable 'passenger_info'. (Or by inputting use the code above)
+# Information includes departure city, destination, travel duration, budget.....
 
 
-# In[ ]:
+# In[133]:
 
 
-df_packages =df_backup
+# Show the output dataframe
+# Passengers can choose one from them.
+results
 
 
-# In[ ]:
+# In[136]:
 
 
-def recommended_packages(df_packages,sort=2):  #0:sorted by total price; 1:sorted by hotel's rating; 2:sorted by recommendation
-##data processing
-    import pandas as pd
-    import re
-    df_packages['comments']=pd.to_numeric(df_packages['comments']) 
-    #normalizae rating
-    df_packages['rating']=df_packages['rating'].apply(lambda x: change_airbnb_rating(x))
-    
-    if sort==0:
-        #sort by package price, hotel rating 
-        result=df_packages.sort_values(by=['total package price','rating'],ascending=[True,False])
-    
-    elif sort==1:
-        #sort by hotel rating, price 
-        result=df_packages.sort_values(by=['rating','total package price'],ascending=[False,True])
-
-    elif sort==2:
-        #recommendation score weight: price 50%, Rating 30%, comments 20%
-        df_packages['std_pkg_price']= normalization(df_packages['total package price'],m=0)
-        df_packages['std_comments']= normalization(df_packages['comments'],m=1)
-        df_packages['recommend_score']=df_packages['std_pkg_price']*0.2  + df_packages['std_comments']*0.4+ df_packages['rating']*0.4
-        result=df_packages.sort_values(by=['recommend_score'],ascending=False)
-    
-    else:
-        print('Sorry, we can not recognize the sorting condition. Please try again.')
-    #print(result.info())
-    return result
+# Write to csv
+# The csv file is posted on Github as well.
+results.to_csv("NYCPAR2019021420190221.csv")
 
