@@ -1,21 +1,21 @@
 
 # coding: utf-8
 
-# In[1]:
+# In[3]:
 
 #standardize hotel rating
 def change_airbnb_rating(rat):
     import re
     if re.match(r'Rating',str(rat)):
-        return (int(re.findall(r'\d',rat)[0])/int(re.findall(r'\d',rat)[1]))
+        return (float(re.findall(r'\d',rat)[0])/float(re.findall(r'\d',rat)[1]))
     else:
         try:
-            return (int(rat))
+            return (float(rat))
         except:
             return rat
 
 
-# In[2]:
+# In[4]:
 
 #price normalization (max-x)/(max-min)
 def normalization(df,m=1): #m=1=>(x-min)/(max-min); m=0 =>(max-x)/(max-min)
@@ -27,7 +27,7 @@ def normalization(df,m=1): #m=1=>(x-min)/(max-min); m=0 =>(max-x)/(max-min)
         return df.apply(lambda x: (mx-x)/(mx-mn))
 
 
-# In[ ]:
+# In[5]:
 
 def recommended_packages(df_packages,sort=0):  #0:sorted by total price; 1:sorted by hotel's rating; 2:sorted by recommendation
 ##data processing
@@ -56,4 +56,9 @@ def recommended_packages(df_packages,sort=0):  #0:sorted by total price; 1:sorte
         print('Sorry, we can not recognize the sorting condition. Please try again.')
     
     return result
+
+
+# In[ ]:
+
+
 
