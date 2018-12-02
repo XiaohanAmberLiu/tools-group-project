@@ -3,7 +3,6 @@
 
 # In[1]:
 
-
 city = 'Paris'
 cktin_year = '2019'
 cktin_month = '02'
@@ -20,69 +19,57 @@ url
 
 # In[2]:
 
+def get_page_info(url,budget,page_total_num):
+    
+    from selenium import webdriver
+    from selenium.webdriver.common.keys import Keys
+    from selenium.webdriver.chrome.options import Options
+    import re
+    import pandas as pd
+    
+    chrome_options = Options()
+    chrome_options.add_argument('--headless')
+    driver = webdriver.Chrome(r"C:\Users\shixinyue\Desktop\Columbia University\Tools for Analytics\web crawler\chromedriver")
+    try:
+        driver.get(url)
+    except:
+        return "Connection Failure"
+    driver.maximize_window()
+    
+    page = 1
+    result = list()
+    while page <= page_total_num:
+        driver.implicitly_wait(30)
+        hotels = driver.find_elements_by_xpath("//div[@class='flex-content  info-and-price MULTICITYVICINITY avgPerNight']")
+        for hotel in hotels:
+            description = ''
+            pr = hotel.find_elements_by_class_name('actualPrice')[0].text
+            price = int(re.search(r'\d+',pr).group())
+            if price < budget:
+                name = hotel.find_elements_by_class_name('hotelTitle')[0].text
+                link = hotel.find_elements_by_xpath("//a[@class='flex-link']")[0].get_attribute('href')
+                ratings = hotel.find_elements_by_class_name('starRating')
+                try:
+                    rating = ratings[0].text
+                except:
+                    pass
+                rates = hotel.find_elements_by_class_name('reviewOverall')
+                try:
+                    rating = rates[0].text
+                except:
+                    pass
+                reviews = hotel.find_elements_by_class_name('reviewCount')
+                try:
+                    review = reviews[1].text
+                except:
+                    review = ''
+                links = hotel.find_elements_by_xpath("//a[@class='flex-link']")
+                link = links[0].get_attribute('href')
+                result.append((name,price,rating,review,description,link))
+        page += 1
+        driver.find_element_by_class_name('pagination-next').click()
+        driver.refresh()
 
-from selenium import webdriver
-from selenium.webdriver.common.keys import Keys
-from selenium.webdriver.chrome.options import Options
-import re
-import pandas as pd
-
-# In[3]:
-
-
-chrome_options = Options()
-chrome_options.add_argument('--headless')
-driver = webdriver.Chrome(r"C:\Users\shixinyue\Desktop\Columbia University\Tools for Analytics\web crawler\chromedriver")
-driver.get(url)
-driver.implicitly_wait(10)
-
-
-# In[5]:
-result = list()
-hotels = driver.find_elements_by_class_name('info-and-price')
-for hotel in hotels:
-    link = hotel.find_elements_by_xpath("//a[@class='flex-link']")
-    link.href
-    #price = hotel.find_elements_by_class_name('actualPrice')[0].text
-    #p = int(re.search(r'\d+',price).group())
-    #if p <= budget:
-    #name = hotel.find_elements_by_class_name('hotelTitle')[0].text
-    #ratings = hotel.find_elements_by_class_name('starRating')
-    #try:
-        #rating = ratings[0].text
-    #except:
-        #pass
-    #rates = hotel.find_elements_by_class_name('reviewOverall')
-    #try:
-        #rating = rates[0].text
-    #except:
-        #pass
- #reviews = hotel.find_elements_by_class_name('reviewCount')
-        #review = reviews[1].text
-        #for x in review:
-            #temp = re.match(r'\d+',x.text)
-            #if temp:
-                #rev=temp.group()
-            #link = hotel.find_elements_by_xpath("//a[@class='flex-link']")[0].get_attribute('href')
-
-names = driver.find_elements_by_class_name('hotelTitle')
-for name in names:
-    print(name.text)
-
-
-# In[6]:
-
-
-reviews = driver.find_elements_by_class_name('reviewOverall')
-for review in reviews:
-    print(review.text)
-
-
-# In[7]:
-
-
-prices = driver.find_elements_by_class_name('actualPrice')
-for price in prices:
-    print(price.text)
-
+    driver.close()
+    return result
 
