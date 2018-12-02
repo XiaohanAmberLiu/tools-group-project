@@ -939,12 +939,13 @@ results = generate_packages(passenger_info,sort)
 # Information includes departure city, destination, travel duration, budget.....
 
 
-# In[133]:
+# In[142]:
 
 
 # Show the output dataframe
 # Passengers can choose one from them.
 results
+# The results screenshot is on Github.
 
 
 # In[136]:
@@ -953,4 +954,25 @@ results
 # Write to csv
 # The csv file is posted on Github as well.
 results.to_csv("NYCPAR2019021420190221.csv")
+
+
+# In[140]:
+
+
+# Since the dataframe is too long, we want a simplified version.
+def print_result(result_df,packages_num=20):
+    from prettytable import PrettyTable
+    x= PrettyTable(["Pkg#", "Price","Out Flight", "Return Flight","Hotel Name","Rating","Review#"])
+    for index in range(packages_num):
+        pos=result_df.iloc[index]
+        x.add_row([index,'%.2f'%pos['total package price'],            '%s(%s)->%s(%s)'% (pos['depart airport1'],pos['depart flight depart time'],pos['depart airport2'],pos['depart flight arrival time']),            '%s(%s)->%s(%s)'% (pos['arrival airport1'],pos['arrival flight depart time'],pos['arrival airport2'],pos['arrival flight arrival time']),            pos['hotel name'][:20],            pos['rating'],            pos['comments']])
+    print(x)
+
+
+# In[143]:
+
+
+# This is a more readable and simplified result.
+# The screenshot of this results is on Github.
+print_result(results)
 
