@@ -4,16 +4,16 @@
 # In[ ]:
 
 
-### We picked up 5 flight websites and 4 hotel websites, and did some web scraping on these website.
+### We picked up 5 flight websites and 2 hotel websites, and did some web scraping on these website.
 ### The main steps are:
 ### 1. Input user information including departure city, destination, travel duration, budget and number of travellers.
 ### 2. Get qualified flight info from Expedia, Hotwire, Priceline and Hipmunk.
-### 3. Get qualified hotel info from Airbnb, Booking and XXXXXX.
+### 3. Get qualified hotel info from Airbnb and Booking.
 ### 4. Combine flight and hotel info then filter to generater travel packages.
 ### 5. Sort the packages by price, rating and recommendation.
 
 
-# In[1]:
+# In[2]:
 
 
 from selenium import webdriver
@@ -30,28 +30,31 @@ from bs4 import BeautifulSoup
 from lxml import html
 
 
-# In[2]:
+# In[41]:
 
 
 ########## STEP 1 Input user information ##########
-passenger_info = ['New York','United States of America','NYC','Paris','France','PAR','02-14-2019','02-21-2019',3000,1,0]
 
-people = str(passenger_info[9])
-children = str(passenger_info[10])
-budget = passenger_info[8]
-departure = passenger_info[0].replace(' ','%20')
-arrival = passenger_info[3].replace(' ','%20')
-depart_country = passenger_info[1].replace(' ','%20')
-arrival_country = passenger_info[4].replace(' ','%20')
-depart_code = passenger_info[2]
-arrival_code = passenger_info[5]
-start_time = passenger_info[6].split('-')
-end_time = passenger_info[7].split('-')
+# INPUT HAS BEEN MOVED TO THE END, RIGHT BEFORE THE 'generate_packages()' FUNCTION.
 
-print (departure,arrival,depart_country,arrival_country,depart_code,arrival_code,start_time,end_time,budget,people)
+# passenger_info = ['New York','United States of America','NYC','Paris','France','PAR','02-14-2019','02-21-2019',3000,1,0]
+
+# people = str(passenger_info[9])
+# children = str(passenger_info[10])
+# budget = passenger_info[8]
+# departure = passenger_info[0].replace(' ','%20')
+# arrival = passenger_info[3].replace(' ','%20')
+# depart_country = passenger_info[1].replace(' ','%20')
+# arrival_country = passenger_info[4].replace(' ','%20')
+# depart_code = passenger_info[2]
+# arrival_code = passenger_info[5]
+# start_time = passenger_info[6].split('-')
+# end_time = passenger_info[7].split('-')
+
+# print (departure,arrival,depart_country,arrival_country,depart_code,arrival_code,start_time,end_time,budget,people)
 
 
-# In[19]:
+# In[5]:
 
 
 ########## STEP 2 Get Flight Info ##########
@@ -86,14 +89,14 @@ def get_flight_expedia(arrival,arrival_country,arrival_code,departure,depart_cod
     return all_flight_expedia
 
 
-# In[20]:
+# In[6]:
 
 
-all_flight_expedia = get_flight_expedia(arrival,arrival_country,arrival_code,departure,depart_code,depart_country,start_time,end_time,people,budget)
-all_flight_expedia
+# all_flight_expedia = get_flight_expedia(arrival,arrival_country,arrival_code,departure,depart_code,depart_country,start_time,end_time,people,budget)
+# all_flight_expedia
 
 
-# In[21]:
+# In[7]:
 
 
 # Now find return flight
@@ -123,14 +126,14 @@ def get_flight_expedia_re(arrival,arrival_country,arrival_code,departure,depart_
     return all_flight_expedia_re
 
 
-# In[22]:
+# In[8]:
 
 
-all_flight_expedia_re = get_flight_expedia_re(arrival,arrival_country,arrival_code,departure,depart_code,depart_country,start_time,end_time,people,budget)
-all_flight_expedia_re
+# all_flight_expedia_re = get_flight_expedia_re(arrival,arrival_country,arrival_code,departure,depart_code,depart_country,start_time,end_time,people,budget)
+# all_flight_expedia_re
 
 
-# In[23]:
+# In[9]:
 
 
 # Get Flight Info on Hotwire
@@ -163,14 +166,14 @@ def get_flight_hotwire(arrival,arrival_country,arrival_code,departure,depart_cod
     return all_flight_hotwire
 
 
-# In[24]:
+# In[10]:
 
 
-all_flight_hotwire = get_flight_hotwire(arrival,arrival_country,arrival_code,departure,depart_code,depart_country,start_time,end_time,people,budget)
-all_flight_hotwire
+# all_flight_hotwire = get_flight_hotwire(arrival,arrival_country,arrival_code,departure,depart_code,depart_country,start_time,end_time,people,budget)
+# all_flight_hotwire
 
 
-# In[25]:
+# In[11]:
 
 
 # Now get the return flight info on Hotwire
@@ -202,14 +205,14 @@ def get_flight_hotwire_re(arrival,arrival_country,arrival_code,departure,depart_
     return all_flight_hotwire_re
 
 
-# In[26]:
+# In[12]:
 
 
-all_flight_hotwire_re = get_flight_hotwire_re(arrival,arrival_country,arrival_code,departure,depart_code,depart_country,start_time,end_time,people,budget)
-all_flight_hotwire_re
+# all_flight_hotwire_re = get_flight_hotwire_re(arrival,arrival_country,arrival_code,departure,depart_code,depart_country,start_time,end_time,people,budget)
+# all_flight_hotwire_re
 
 
-# In[82]:
+# In[13]:
 
 
 # Get Flight Info on Priceline
@@ -217,7 +220,7 @@ all_flight_hotwire_re
 # Generate flight search URL
 def get_flight_priceline(arrival_code,depart_code,start_time,end_time,people,budget):
     url_priceline = 'https://www.priceline.com/m/fly/search/'+depart_code+'-'+arrival_code+'-'+start_time[2]+start_time[0]+start_time[1]+'/'+arrival_code+'-'+depart_code+'-'+end_time[2]+end_time[0]+end_time[1]+'/?cabin-class=ECO&no-date-search=false&search-type=1111&num-adults='+people
-    print(url_priceline)
+    #print(url_priceline)
     # Start Scraping
     browser_priceline = webdriver.Chrome()
     browser_priceline.get(url_priceline)
@@ -225,7 +228,7 @@ def get_flight_priceline(arrival_code,depart_code,start_time,end_time,people,bud
         browser_priceline.execute_script("window.scrollTo(0, document.body.scrollHeight);")
 
     flight_list_priceline = browser_priceline.find_elements_by_class_name('sc-jdfcpN')
-    print(flight_list_priceline)
+    #print(flight_list_priceline)
     all_flight_priceline = []
     all_flight_priceline_re = []
 
@@ -267,19 +270,13 @@ def get_flight_priceline(arrival_code,depart_code,start_time,end_time,people,bud
     return all_flight_priceline,all_flight_priceline_re
 
 
-# In[83]:
+# In[14]:
 
 
-all_flight_priceline,all_flight_priceline_re = get_flight_priceline(arrival_code,depart_code,start_time,end_time,people,budget)
+# all_flight_priceline,all_flight_priceline_re = get_flight_priceline(arrival_code,depart_code,start_time,end_time,people,budget)
 
 
-# In[67]:
-
-
-all_flight_priceline,all_flight_priceline_re
-
-
-# In[49]:
+# In[15]:
 
 
 # Get Flight Info on Hipmunk
@@ -325,14 +322,14 @@ def get_flight_hipmunk(departure,arrival,start_time,end_time):
     return all_flight
 
 
-# In[31]:
+# In[16]:
 
 
-all_flight_hipmunk = get_flight_hipmunk(departure,arrival,start_time,end_time)
-all_flight_hipmunk
+# all_flight_hipmunk = get_flight_hipmunk(departure,arrival,start_time,end_time)
+# all_flight_hipmunk
 
 
-# In[54]:
+# In[17]:
 
 
 def get_flight_hipmunk_re(departure,arrival,start_time,end_time):
@@ -372,14 +369,14 @@ def get_flight_hipmunk_re(departure,arrival,start_time,end_time):
     return all_flight_priceline_re
 
 
-# In[55]:
+# In[18]:
 
 
-all_flight_hipmunk_re = get_flight_hipmunk_re(departure,arrival,start_time,end_time)
-all_flight_hipmunk_re
+# all_flight_hipmunk_re = get_flight_hipmunk_re(departure,arrival,start_time,end_time)
+# all_flight_hipmunk_re
 
 
-# In[32]:
+# In[19]:
 
 
 ########## STEP 3 Get Hotel Info ##########
@@ -391,7 +388,7 @@ def get_main_url_airbnb(destination,adult_num,child_num,cktin_date,cktout_date):
     return url
 
 
-# In[33]:
+# In[20]:
 
 
 # Get Page Info Function
@@ -482,7 +479,7 @@ def get_page_info_airbnb(url,budget,page_total_num=1):
     return result
 
 
-# In[34]:
+# In[21]:
 
 
 # Combination Function
@@ -492,16 +489,16 @@ def get_airbnb_list(destination,adult_num,child_num,cktin_date,cktout_date,budge
     return get_page_info_airbnb(url,budget,page_total_num=1)
 
 
-# In[35]:
+# In[22]:
 
 
 # Now get the results on Airbnb
-hotel_airbnb = get_airbnb_list(arrival,people,children,start_time[2]+'-'+start_time[0]+'-'+start_time[1],end_time[2]+'-'+end_time[0]+'-'+end_time[1],int(budget))
-# Output format:(name,total_price,rating,# of comments,description,link)
-hotel_airbnb
+# hotel_airbnb = get_airbnb_list(arrival,people,children,start_time[2]+'-'+start_time[0]+'-'+start_time[1],end_time[2]+'-'+end_time[0]+'-'+end_time[1],int(budget))
+# # Output format:(name,total_price,rating,# of comments,description,link)
+# hotel_airbnb
 
 
-# In[36]:
+# In[23]:
 
 
 # Get Hotel Info on Booking 
@@ -614,7 +611,7 @@ def set_basic_info_booking(destination,adult_num,child_num,cktin_date,cktout_dat
         
 
 
-# In[37]:
+# In[24]:
 
 
 def get_page_info_booking(driver,budget,page_total_num=1):  
@@ -638,7 +635,7 @@ def get_page_info_booking(driver,budget,page_total_num=1):
                 if p<=budget:
                     #get hotel url
                     try:
-                        link=Hotel.find_elements_by_xpath("//a[@class='hotel_name_link url']")
+                        link=Hotel.find_elements_by_xpath(".//a[@class='hotel_name_link url']")
                         l=link[0].get_attribute('href')
                     except:
                         l=""
@@ -673,7 +670,7 @@ def get_page_info_booking(driver,budget,page_total_num=1):
                     except:
                         rev=""
 
-                    result.append((n,p,r,rev,d,l))
+                    result.append((n,p,float(r)/10,rev,d,l))
                 else:
                     continue
 
@@ -688,7 +685,7 @@ def get_page_info_booking(driver,budget,page_total_num=1):
     return result
 
 
-# In[38]:
+# In[25]:
 
 
 def get_booking_list(destination,adult_num,child_num,cktin_date,cktout_date,budget):
@@ -696,22 +693,22 @@ def get_booking_list(destination,adult_num,child_num,cktin_date,cktout_date,budg
     return get_page_info_booking(driver,budget,page_total_num=1)
 
 
-# In[39]:
+# In[26]:
 
 
-hotel_booking = get_booking_list('Paris',int(people),int(children),
-                                 start_time[2]+'-'+start_time[0]+'-'+start_time[1],
-                                 end_time[2]+'-'+end_time[0]+'-'+end_time[1],budget)
-hotel_booking
+# hotel_booking = get_booking_list('Paris',int(people),int(children),
+#                                  start_time[2]+'-'+start_time[0]+'-'+start_time[1],
+#                                  end_time[2]+'-'+end_time[0]+'-'+end_time[1],budget)
+# hotel_booking
 
 
-# In[42]:
+# In[95]:
 
 
 ########## STEP 4 Combine and Filter Hotels and Flights ##########
 
 # Combine all flight info (except Priceline)
-def get_all_depart_flight():
+def get_all_depart_flight(all_flight_expedia,all_flight_hotwire,all_flight_hipmunk):
     flight_list = []
     all_flight = []
     # First combine all flights
@@ -734,35 +731,35 @@ def get_all_depart_flight():
             flight_list.append(i)
     return flight_list
             
-def get_all_return_flight():
-    flight_list = []
-    all_flight = []
+def get_all_return_flight(all_flight_expedia_re,all_flight_hotwire_re,all_flight_hipmunk_re):
+    flight_list_re = []
+    all_flight_re = []
     # First combine all flights
-    all_flight.extend(all_flight_expedia_re)
-    all_flight.extend(all_flight_hotwire_re)
-    all_flight.extend(all_flight_hipmunk_re)
+    all_flight_re.extend(all_flight_expedia_re)
+    all_flight_re.extend(all_flight_hotwire_re)
+    all_flight_re.extend(all_flight_hipmunk_re)
     # For the same flights, keep the cheaper one.
-    for i in all_flight:
+    for i in all_flight_re:
         same = False
-        for j in flight_list:
+        for j in flight_list_re:
             if j[0]==i[0] and j[1]==i[1] and j[2]==i[2] and j[3]==i[3] and j[4]==i[4]:
                 same = True
                 if i[6]<j[6]:
-                    flight_list.remove(j)
-                    flight_list.append(i)
+                    flight_list_re.remove(j)
+                    flight_list_re.append(i)
                     break
                 else:
                     break
         if same == False:
-            flight_list.append(i)
-    return flight_list
+            flight_list_re.append(i)
+    return flight_list_re
 
 
-# In[43]:
+# In[96]:
 
 
 # Combine all hotel info
-def get_all_hotels():
+def get_all_hotels(hotel_airbnb,hotel_booking):
     hotel_list = []
     all_hotel = []
     all_hotel.extend(hotel_airbnb)
@@ -784,7 +781,7 @@ def get_all_hotels():
     return hotel_list
 
 
-# In[44]:
+# In[97]:
 
 
 # Combine flights and hotels, then generate qualified packages.
@@ -803,43 +800,181 @@ def priceline_package(departflights,returnflights,hotels):
     packages = []
     for i in range(len(departflights)):
             for h in hotels:
-                package_price = float(departflights[i][6])+float(returnflights[i][6])+h[1]
+                package_price = float(departflights[i][6])+h[1]
                 if package_price<=float(budget):
                     packages.append(list(departflights[i])+list(returnflights[i])+list(h)+[package_price])
     return packages
 
 
-# In[84]:
+# In[98]:
 
 
-all_packages = possible_package(get_all_depart_flight(),get_all_return_flight(),
-                                get_all_hotels()) + priceline_package(all_flight_priceline,all_flight_priceline_re,get_all_hotels())
+########## STEP 5 Sorting #########
+
+# standardize hotel rating
+def change_airbnb_rating(rat):
+    import re
+    if re.match(r'Rating',str(rat)):
+        return (float(re.findall(r'\d',rat)[0])/float(re.findall(r'\d',rat)[1]))
+    else:
+        try:
+            return (float(rat))
+        except:
+            return 'NaN'
+
+#price normalization (max-x)/(max-min)
+def normalization(df,m=1): #m=1=>(x-min)/(max-min); m=0 =>(max-x)/(max-min)
+    mx=df.max()
+    mn=df.min()
+    if m==1:
+        return df.apply(lambda x: (x-mn)/(mx-mn))
+    else:
+        return df.apply(lambda x: (mx-x)/(mx-mn))
 
 
-# In[91]:
+# In[99]:
 
 
-len(priceline_package(all_flight_priceline,all_flight_priceline_re,get_all_hotels()))
+def generate_packages(passenger_info,sort = 0):
+    people = str(passenger_info[9])
+    children = str(passenger_info[10])
+    budget = passenger_info[8]
+    departure = passenger_info[0].replace(' ','%20')
+    arrival = passenger_info[3].replace(' ','%20')
+    depart_country = passenger_info[1].replace(' ','%20')
+    arrival_country = passenger_info[4].replace(' ','%20')
+    depart_code = passenger_info[2]
+    arrival_code = passenger_info[5]
+    start_time = passenger_info[6].split('-')
+    end_time = passenger_info[7].split('-')
+    
+    all_flight_expedia = get_flight_expedia(arrival,arrival_country,arrival_code,departure,depart_code,depart_country,start_time,end_time,people,budget)
+    all_flight_expedia_re = get_flight_expedia_re(arrival,arrival_country,arrival_code,departure,depart_code,depart_country,start_time,end_time,people,budget)
+    all_flight_hotwire = get_flight_hotwire(arrival,arrival_country,arrival_code,departure,depart_code,depart_country,start_time,end_time,people,budget)
+    all_flight_hotwire_re = get_flight_hotwire_re(arrival,arrival_country,arrival_code,departure,depart_code,depart_country,start_time,end_time,people,budget)
+    all_flight_priceline,all_flight_priceline_re = get_flight_priceline(arrival_code,depart_code,start_time,end_time,people,budget)
+    all_flight_hipmunk = get_flight_hipmunk(departure,arrival,start_time,end_time)
+    all_flight_hipmunk_re = get_flight_hipmunk_re(departure,arrival,start_time,end_time)
+    hotel_airbnb = get_airbnb_list(arrival,people,children,start_time[2]+'-'+start_time[0]+'-'+start_time[1],end_time[2]+'-'+end_time[0]+'-'+end_time[1],budget)
+    hotel_booking = get_booking_list(arrival,int(people),int(children),
+                                     start_time[2]+'-'+start_time[0]+'-'+start_time[1],
+                                     end_time[2]+'-'+end_time[0]+'-'+end_time[1],budget)
+    all_packages = possible_package(get_all_depart_flight(all_flight_expedia,all_flight_hotwire,all_flight_hipmunk),
+                                    get_all_return_flight(all_flight_expedia_re,all_flight_hotwire_re,all_flight_hipmunk_re),
+                                    get_all_hotels(hotel_airbnb,hotel_booking)) + priceline_package(all_flight_priceline,all_flight_priceline_re,get_all_hotels(hotel_airbnb,hotel_booking))
+#     except NameError:
+#         print("There's something wrong with expedia.com. Please try agin after several minutes.")
+              
+    import pandas as pd
+    import numpy as np
+    columns = ['depart airline','depart airport1','depart airport2','depart flight depart time','depart flight arrival time',
+              'depart flight stops','depart flight price','depart flight link',
+               'arrival airline','arrival airport1','arrival airport2','arrival flight depart time','arrival flight arrival time',
+              'arrival flight stops','arrival flight price','arrival flight link',
+               'hotel name','hotel price','rating','comments','description','hotel link','total package price']
+    df_packages = pd.DataFrame(all_packages,columns=columns)
+    
+    import re
+    df_packages['comments']=pd.to_numeric(df_packages['comments']) 
+    #normalizae rating
+    df_packages['rating']=df_packages['rating'].apply(lambda x: change_airbnb_rating(x))
+    
+    if sort==0:
+        #sort by package price, hotel rating 
+        result=df_packages.sort_values(by=['total package price','rating'],ascending=[True,False])
+    
+    elif sort==1:
+        #sort by hotel rating, price 
+        result=df_packages.sort_values(by=['rating','total package price'],ascending=[False,True])
+
+    elif sort==2:
+        #recommendation score weight: price 50%, Rating 30%, comments 20%
+        df_packages['std_pkg_price']= normalization(df_packages['total package price'],m=0)
+        df_packages['std_comments']= normalization(df_packages['comments'],m=1)
+        df_packages['recommend_score']=df_packages['std_pkg_price']*0.2  + df_packages['std_comments']*0.4+ df_packages['rating']*0.4
+        result=df_packages.sort_values(by=['recommend_score'],ascending=False)
+    
+    else:
+        print('Sorry, we can not recognize the sorting condition. Please try again.')
+     
+    print('This is all the qualified sorted packages. Please choose one from them.')
+    return result
+  
 
 
-# In[85]:
+# In[100]:
 
 
-print(len(all_packages))
-#all_packages
-import pandas as pd
-import numpy as np
-columns = ['depart airline','depart airport1','depart airport2','depart flight depart time','depart flight arrival time',
-          'depart flight stops','depart flight price','depart flight link',
-           'arrival airline','arrival airport1','arrival airport2','arrival flight depart time','arrival flight arrival time',
-          'arrival flight stops','arrival flight price','arrival flight link',
-           'hotel name','hotel price','rating','comments','description','hotel link','total package price']
-df_packages = pd.DataFrame(all_packages,columns=columns)
+###################### THIS IS THE INPUT #######################
+
+# When using this tool, you could uncomment the following codes and input whatever you want.
+# But pay attention to the format!!!
+
+# passenger_info = [input('Plase input the departure city:'),input('Plase input the departure Country:'),input('Plase input the departure city code:'),
+#                  input('Plase input the destination city:'),input('Plase input the destination country:'),
+#                  input('Plase input the destination code:'),input('Plase input the depart date (MM-DD-YYYY):'),
+#                  input('Plase input the return date (MM-DD-YYYY):'),int(input('Plase input a budget(int):')),
+#                   int(input('Plase input the number of adults(int):')),int(input('Plase input the number of children(int):'))]
+
+# sort = int(input('Please input the sorting method(0:by price,1:by rating,2:by recommendation):'))
+
+
+# In[101]:
+
+
+# For now, we take input as following for instance.
+passenger_info = ['New York','United States of America','NYC','Paris','France','PAR','02-14-2019','02-21-2019',3000,1,0]
+sort = 2
+
+
+# In[102]:
+
+
+results = generate_packages(passenger_info,sort)
+
+
+# In[ ]:
+
+
+df_backup = df_packages
 df_packages
+#len(df_packages)
 
 
-# In[86]:
+# In[ ]:
 
 
-len(df_packages)
+df_packages =df_backup
+
+
+# In[ ]:
+
+
+def recommended_packages(df_packages,sort=2):  #0:sorted by total price; 1:sorted by hotel's rating; 2:sorted by recommendation
+##data processing
+    import pandas as pd
+    import re
+    df_packages['comments']=pd.to_numeric(df_packages['comments']) 
+    #normalizae rating
+    df_packages['rating']=df_packages['rating'].apply(lambda x: change_airbnb_rating(x))
+    
+    if sort==0:
+        #sort by package price, hotel rating 
+        result=df_packages.sort_values(by=['total package price','rating'],ascending=[True,False])
+    
+    elif sort==1:
+        #sort by hotel rating, price 
+        result=df_packages.sort_values(by=['rating','total package price'],ascending=[False,True])
+
+    elif sort==2:
+        #recommendation score weight: price 50%, Rating 30%, comments 20%
+        df_packages['std_pkg_price']= normalization(df_packages['total package price'],m=0)
+        df_packages['std_comments']= normalization(df_packages['comments'],m=1)
+        df_packages['recommend_score']=df_packages['std_pkg_price']*0.2  + df_packages['std_comments']*0.4+ df_packages['rating']*0.4
+        result=df_packages.sort_values(by=['recommend_score'],ascending=False)
+    
+    else:
+        print('Sorry, we can not recognize the sorting condition. Please try again.')
+    #print(result.info())
+    return result
 
