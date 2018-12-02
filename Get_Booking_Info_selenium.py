@@ -1,10 +1,10 @@
 
 # coding: utf-8
 
-# In[8]:
+# In[7]:
 
 #send basic info to booking
-def set_basic_info(destination,adult_num,child_num,cktin_date,cktout_date):
+def set_basic_info_booking(destination,adult_num,child_num,cktin_date,cktout_date):
     from selenium import webdriver
     from selenium.webdriver.common.keys import Keys
     from selenium.webdriver.chrome.options import Options
@@ -110,9 +110,9 @@ def set_basic_info(destination,adult_num,child_num,cktin_date,cktout_date):
     return driver
 
 
-# In[11]:
+# In[8]:
 
-def get_page_info(driver,budget,page_total_num=1):  
+def get_page_info_booking(driver,budget,page_total_num=1):  
     import re
     from selenium import webdriver
     page=1
@@ -133,7 +133,7 @@ def get_page_info(driver,budget,page_total_num=1):
                 if p<=budget:
                     #get hotel url
                     try:
-                        link=Hotel.find_elements_by_xpath("//a[@class='hotel_name_link url']")
+                        link=Hotel.find_elements_by_xpath(".//a[@class='hotel_name_link url']")
                         l=link[0].get_attribute('href')
                     except:
                         l=""
@@ -168,7 +168,7 @@ def get_page_info(driver,budget,page_total_num=1):
                     except:
                         rev=""
 
-                    result.append((n,p,r,rev,d,l))
+                    result.append((n,p,float(r)/10,rev,d,l))
                 else:
                     continue
 
@@ -179,27 +179,16 @@ def get_page_info(driver,budget,page_total_num=1):
         driver.find_element_by_xpath("//li[@class='bui-pagination__item bui-pagination__next-arrow']").click()
         driver.refresh()
 
-    #driver.close()
+    driver.close()
     return result
 
 
 
-# In[12]:
+# In[11]:
 
 def get_booking_list(destination,adult_num,child_num,cktin_date,cktout_date,budget):
-    driver=set_basic_info(destination,adult_num,child_num,cktin_date,cktout_date)
-    return get_page_info(driver,budget,page_total_num=2)
-
-
-# In[15]:
-
-#destination,adult_num,child_num,cktin_date,cktout_date,budget
-cktin_date='2019-02-14'
-cktout_date='2019-02-21'
-adult_num=2
-child_num=0
-destination='Paris'
-get_booking_list(destination,adult_num,child_num,cktin_date,cktout_date,1000)
+    driver=set_basic_info_booking(destination,adult_num,child_num,cktin_date,cktout_date)
+    return get_page_info_booking(driver,budget,page_total_num=1)
 
 
 # In[ ]:
