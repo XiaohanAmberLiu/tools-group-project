@@ -1,7 +1,6 @@
 # tools-group-project
-Tools for analytics 2018, members include Xiaohan Liu, Mingshan Zhang, Yue Li, Xinyue Shi
-###Description of the project:
-The goal of the project is a personalized recommendation system helping people who is planning travels find the best travel package consisting of hotels and flights. The customer can input the place of departure, destination, start date, end date and budget, and the recommendation system can output ranked travel packages according to different ranking criterion. There are 3 ranking criterion which are price of the package (1), rating of the hotel (2) and recommendation weighted score (3).
+Description of the project:
+The goal of the project is to build a personalized recommendation system helping people who is planning travels find the best travel package consisting of hotels and flights. The customer can input the place of departure, destination, start date, end date and budget, and the system can output ranked travel packages according to different ranking criterion. There are 3 ranking criterion which are price of the package (1), rating of the hotel (2) and recommendation weighted score (3).
 
 About the ranking criterion: 
 (1)	Rank the packages by the total price of hotel and roundtrip flight, if the total price is the same, then rank them by the rating of the hotel, which is the ranking criteria (2). 
@@ -39,10 +38,10 @@ Note: If you fail to execute the above command line try adding sudo in front of 
 Since the remaining four web pages as priceline (flight), hipmunk (flight), Booking (hotel), Airbnb (hotel) are dynamic loading web pages in which python cannot scrape the complete source code of the web page, so we install a new library selenium
 We type:
 !pip install selenium
+
 2)	Import packages
 
 
-Python 
 from selenium import webdriver
 from selenium.webdriver.common.by import By
 from selenium.webdriver.common.keys import Keys
@@ -58,18 +57,10 @@ from lxml import html
 
 
 Run Instructions:
-
+	the main_program.py is the only program that we need to run, other .py files are used to be integrated into the main function
+	To start the program, we need to input the traveler’s information in the input module, including departure city, departure country, destination city code, destination city, destination country, destination code, depart date (MM-DD-YYYY), return date (MM-DD-YYYY), budget, number of adults, number of children, the sorting method (0:by price,1:by rating,2:by recommendation). Format of these input variables need to be paid attention to.
+	For the chromedriver in selenium, we need to download chromedriver.exe and add the path into the parenthesis of driver = webdriver.chrome().
 	It is possible that we visit the web page frequently so that the “robot check “error might be raised, indicating that we visit too frequently to be recognized as an robot, wait for a while before next try may solve this problem.
 	It is possible that opening the webpage and the clicking process might take some time, so please be patient for it to process and do not close the window before it’s done.
 
-
-
-
-
-
-
-
-
-
-Contributor guidelines:
 
