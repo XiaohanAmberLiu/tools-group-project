@@ -33,6 +33,7 @@ Sec 002
 
 ### Installation Instruction:
 1)	Installation
+
 Since expedia and hotwire are static web page in which python can use a combination of libraries as requests and BeautifulSoup. We need to get the BeautifulSoup library using pip, a package management tool for python.
 We type:
 
