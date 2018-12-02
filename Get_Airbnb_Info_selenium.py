@@ -1,16 +1,16 @@
 
 # coding: utf-8
 
-# In[8]:
+# In[1]:
 
-def get_main_url(destination,adult_num,child_num,cktin_date,cktout_date):
+def get_main_url_airbnb(destination,adult_num,child_num,cktin_date,cktout_date):
     url="https://www.airbnb.com/s/"+destination+"/homes?adults="+adult_num+"&children="+child_num+"&checkin="+cktin_date+"&checkout="+cktout_date+"&refinement_paths%5B%5D=%2"+"Fhomes&allow_override%5B%5D=&s_tag=Vobyce0e"
     return url
 
 
-# In[12]:
+# In[2]:
 
-def get_page_info(url,budget,page_total_num=1): 
+def get_page_info_airbnb(url,budget,page_total_num=1): 
     from selenium import webdriver
     from selenium.webdriver.common.keys import Keys
     from selenium.webdriver.chrome.options import Options
@@ -99,11 +99,11 @@ def get_page_info(url,budget,page_total_num=1):
     return result
 
 
-# In[13]:
+# In[3]:
 
 def get_airbnb_list(destination,adult_num,child_num,cktin_date,cktout_date,budget):
-    url=get_main_url(destination,adult_num,child_num,cktin_date,cktout_date)
-    return get_page_info(url,budget,page_total_num=1)
+    url=get_main_url_airbnb(destination,adult_num,child_num,cktin_date,cktout_date)
+    return get_page_info_airbnb(url,budget,page_total_num=1)
 
 
 # In[14]:
