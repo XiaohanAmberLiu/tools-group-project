@@ -2,12 +2,14 @@
 ### Description of the project:
 The goal of the project is to build a personalized recommendation system helping people who is planning travels find the best travel package consist of hotels and flights. The customer can input the place of departure, destination, start date, end date and budget, and the recommendation system can provide sorted travel packages including departure flght, return flight and hotel. There are 3 diffenrent ranking criterion when sorting travel packages which are total price of the package (1), rating of the hotel (2) and recommendation score (3).
 
+
 **The main steps**
 1. Input user information including departure city, destination, travel duration, budget and number of travelers.
 2. Get qualified flight info from Expedia, Hotwire, Priceline and Hipmunk.
 3. Get qualified hotel info from Airbnb and Booking.
 4. Combine flight and hotel info then filter to generate travel packages.
 5. Sort the packages by price, rating and recommendation.
+
 
 **the ranking criterion**
 1. Rank the packages by the total price of hotel and roundtrip flight, if the total price is the same, then rank them by the rating of the hotel, which is the ranking criteria (2). 
@@ -17,8 +19,14 @@ The goal of the project is to build a personalized recommendation system helping
 
 **About the result**
 1. The result is printed in the form of data frame, and each row represents a travel package including the detailed information of the hotel, departing flight and return flight, each column represents a variable like airline, airport, time, hotel name, rating, comments, price, etc. 
-2. The result is saved as pictures and can be accessed by the following link: link:https://pan.baidu.com/s/1KYrYCbO5GeW1QyyY9uVXoA  password:l9z8
 
+![alt text](https://github.com/XiaohanAmberLiu/tools-group-project/blob/master/Recommended%20packages%20dataframe.png)
+     
+
+2. Since the generated dataframe is too long to read, we provide a simplified table as well, which is much more readable. However, there's more information in the dataframe version. So please refer to the dataframe output if you need detailed results.
+
+![alt text](https://github.com/XiaohanAmberLiu/tools-group-project/blob/master/Simplified%20package%20table.png)
+      
 
 ### Group name and Section:
 **Contributors (in random order):**
@@ -26,6 +34,7 @@ Mingshan Zhang (mz2701)
 Yue Li (yl4015)
 Xinyue Shi (xs2349)
 Xiaohan Liu (xl2838)
+
 
 **Section:**
 Sec 002
@@ -51,6 +60,7 @@ We type:
 !pip install selenium
 
 ```
+
 
 2)	Import packages
 
