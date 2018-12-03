@@ -1,7 +1,7 @@
 
 # coding: utf-8
 
-# In[ ]:
+# In[2]:
 
 
 ### We picked up 5 flight websites and 2 hotel websites, and did some web scraping on these website.
@@ -13,7 +13,7 @@
 ### 5. Sort the packages by price, rating and recommendation.
 
 
-# In[2]:
+# In[3]:
 
 
 from selenium import webdriver
@@ -30,7 +30,7 @@ from bs4 import BeautifulSoup
 from lxml import html
 
 
-# In[41]:
+# In[4]:
 
 
 ########## STEP 1 Input user information ##########
@@ -54,7 +54,7 @@ from lxml import html
 # print (departure,arrival,depart_country,arrival_country,depart_code,arrival_code,start_time,end_time,budget,people)
 
 
-# In[5]:
+# In[132]:
 
 
 ########## STEP 2 Get Flight Info ##########
@@ -89,14 +89,14 @@ def get_flight_expedia(arrival,arrival_country,arrival_code,departure,depart_cod
     return all_flight_expedia
 
 
-# In[6]:
+# In[133]:
 
 
 # all_flight_expedia = get_flight_expedia(arrival,arrival_country,arrival_code,departure,depart_code,depart_country,start_time,end_time,people,budget)
 # all_flight_expedia
 
 
-# In[7]:
+# In[134]:
 
 
 # Now find return flight
@@ -126,14 +126,14 @@ def get_flight_expedia_re(arrival,arrival_country,arrival_code,departure,depart_
     return all_flight_expedia_re
 
 
-# In[8]:
+# In[135]:
 
 
 # all_flight_expedia_re = get_flight_expedia_re(arrival,arrival_country,arrival_code,departure,depart_code,depart_country,start_time,end_time,people,budget)
 # all_flight_expedia_re
 
 
-# In[9]:
+# In[136]:
 
 
 # Get Flight Info on Hotwire
@@ -166,14 +166,14 @@ def get_flight_hotwire(arrival,arrival_country,arrival_code,departure,depart_cod
     return all_flight_hotwire
 
 
-# In[10]:
+# In[137]:
 
 
 # all_flight_hotwire = get_flight_hotwire(arrival,arrival_country,arrival_code,departure,depart_code,depart_country,start_time,end_time,people,budget)
 # all_flight_hotwire
 
 
-# In[11]:
+# In[138]:
 
 
 # Now get the return flight info on Hotwire
@@ -205,14 +205,14 @@ def get_flight_hotwire_re(arrival,arrival_country,arrival_code,departure,depart_
     return all_flight_hotwire_re
 
 
-# In[12]:
+# In[139]:
 
 
 # all_flight_hotwire_re = get_flight_hotwire_re(arrival,arrival_country,arrival_code,departure,depart_code,depart_country,start_time,end_time,people,budget)
 # all_flight_hotwire_re
 
 
-# In[13]:
+# In[140]:
 
 
 # Get Flight Info on Priceline
@@ -248,9 +248,14 @@ def get_flight_priceline(arrival_code,depart_code,start_time,end_time,people,bud
             depart_airport_re = i.find_elements_by_xpath(".//*[@data-test='left-airport-code']")[1].text
             arrival_airport_re = i.find_elements_by_xpath(".//*[@data-test='right-airport-code']")[1].text
             depart_time = i.find_elements_by_tag_name('time')[0].text
+#             print(depart_time)
             arrival_time = i.find_elements_by_tag_name('time')[1].text
-            depart_time_re = i.find_elements_by_tag_name('time')[2].text
-            arrival_time_re = i.find_elements_by_tag_name('time')[3].text
+#             print(arrival_time)
+            depart_time_re = i.find_elements_by_tag_name('time')[3].text
+#             print(depart_time_re)
+            arrival_time_re = i.find_elements_by_tag_name('time')[4].text
+#             print(arrival_time_re)
+            
             airline = i.find_elements_by_class_name('sc-bFADNz')[0].text
             airline_re = i.find_elements_by_class_name('sc-bFADNz')[1].text
             stop = i.find_elements_by_xpath(".//*[@data-test='stops-text-component']")[0].text
@@ -270,19 +275,19 @@ def get_flight_priceline(arrival_code,depart_code,start_time,end_time,people,bud
     return all_flight_priceline,all_flight_priceline_re
 
 
-# In[14]:
+# In[141]:
 
 
-# all_flight_priceline,all_flight_priceline_re = get_flight_priceline(arrival_code,depart_code,start_time,end_time,people,budget)
+# all_flight_priceline,all_flight_priceline_re = get_flight_priceline('PAR','NYC',['02','14','2019'],['02','21','2019'],'1',600)
 
 
-# In[15]:
+# In[142]:
 
 
 # Get Flight Info on Hipmunk
 
 #  Hipmunk URL
-def get_flight_hipmunk(departure,arrival,start_time,end_time):
+def get_flight_hipmunk(departure,arrival,start_time,end_time,budget):
     url= 'https://www.hipmunk.com/flights#f='+departure+';t='+arrival+';d='+start_time[2]+'-'+start_time[0]+'-'+start_time[1]+';r='+end_time[2]+'-'+end_time[0]+'-'+end_time[1]+';is_search_for_business=false'
 
     chrome_options = Options()
@@ -311,8 +316,10 @@ def get_flight_hipmunk(departure,arrival,start_time,end_time):
             arrival_airport = str(split_airports[1])
             times=i.find_elements_by_class_name('flight-tab-routing-info-popup__routing-times')[0].text
             split_times=times.split('–')
-            depart_time=str(split_times[0])
-            arrival_time=str(split_times[1])
+            depart_time=str(split_times[0][4:]).strip()
+            #print(depart_time)
+            arrival_time=str(split_times[1][6:]).strip()
+            #print(arrival_time)
             airline=i.find_elements_by_class_name('FlightRowLeftColumn__airline-name')[0].text
             stop='NA'
             link=url
@@ -322,17 +329,17 @@ def get_flight_hipmunk(departure,arrival,start_time,end_time):
     return all_flight
 
 
-# In[16]:
+# In[143]:
 
 
-# all_flight_hipmunk = get_flight_hipmunk(departure,arrival,start_time,end_time)
+# all_flight_hipmunk = get_flight_hipmunk('New York','Paris',['02','14','2019'],['02','21','2019'],6000)
 # all_flight_hipmunk
 
 
-# In[17]:
+# In[144]:
 
 
-def get_flight_hipmunk_re(departure,arrival,start_time,end_time):
+def get_flight_hipmunk_re(departure,arrival,start_time,end_time,budget):
 
     url_re= 'https://www.hipmunk.com/flights#f='+departure+';t='+arrival+';d='+start_time[2]+'-'+start_time[0]+'-'+start_time[1]+';r='+end_time[2]+'-'+end_time[0]+'-'+end_time[1]+';is_search_for_business=false;group=1'
     chrome_options = Options()
@@ -358,8 +365,10 @@ def get_flight_hipmunk_re(departure,arrival,start_time,end_time):
             arrival_airport_re = str(split_airports_re[1])
             times_re=i.find_elements_by_class_name('flight-tab-routing-info-popup__routing-times')[0].text
             split_times_re=times_re.split('–')
-            depart_time_re=str(split_times_re[0])
-            arrival_time_re=str(split_times_re[1])
+            depart_time_re=str(split_times_re[0][4:]).strip()
+            #print(depart_time_re)
+            arrival_time_re=str(split_times_re[1][4:]).strip()
+            #print(arrival_time_re)
             airline_re=i.find_elements_by_class_name('FlightRowLeftColumn__airline-name')[0].text
             stop_re='NA'
             link_re=url_re
@@ -369,14 +378,14 @@ def get_flight_hipmunk_re(departure,arrival,start_time,end_time):
     return all_flight_priceline_re
 
 
-# In[18]:
+# In[145]:
 
 
-# all_flight_hipmunk_re = get_flight_hipmunk_re(departure,arrival,start_time,end_time)
+# all_flight_hipmunk_re = get_flight_hipmunk_re('New York','Paris',['02','14','2019'],['02','21','2019'],6000)
 # all_flight_hipmunk_re
 
 
-# In[19]:
+# In[146]:
 
 
 ########## STEP 3 Get Hotel Info ##########
@@ -388,7 +397,7 @@ def get_main_url_airbnb(destination,adult_num,child_num,cktin_date,cktout_date):
     return url
 
 
-# In[20]:
+# In[147]:
 
 
 # Get Page Info Function
@@ -479,7 +488,7 @@ def get_page_info_airbnb(url,budget,page_total_num=1):
     return result
 
 
-# In[21]:
+# In[148]:
 
 
 # Combination Function
@@ -489,7 +498,7 @@ def get_airbnb_list(destination,adult_num,child_num,cktin_date,cktout_date,budge
     return get_page_info_airbnb(url,budget,page_total_num=1)
 
 
-# In[22]:
+# In[149]:
 
 
 # Now get the results on Airbnb
@@ -498,7 +507,7 @@ def get_airbnb_list(destination,adult_num,child_num,cktin_date,cktout_date,budge
 # hotel_airbnb
 
 
-# In[23]:
+# In[150]:
 
 
 # Get Hotel Info on Booking 
@@ -611,7 +620,7 @@ def set_basic_info_booking(destination,adult_num,child_num,cktin_date,cktout_dat
         
 
 
-# In[24]:
+# In[151]:
 
 
 def get_page_info_booking(driver,budget,page_total_num=1):  
@@ -685,7 +694,7 @@ def get_page_info_booking(driver,budget,page_total_num=1):
     return result
 
 
-# In[25]:
+# In[152]:
 
 
 def get_booking_list(destination,adult_num,child_num,cktin_date,cktout_date,budget):
@@ -693,7 +702,7 @@ def get_booking_list(destination,adult_num,child_num,cktin_date,cktout_date,budg
     return get_page_info_booking(driver,budget,page_total_num=1)
 
 
-# In[26]:
+# In[153]:
 
 
 # hotel_booking = get_booking_list('Paris',int(people),int(children),
@@ -702,7 +711,7 @@ def get_booking_list(destination,adult_num,child_num,cktin_date,cktout_date,budg
 # hotel_booking
 
 
-# In[95]:
+# In[154]:
 
 
 ########## STEP 4 Combine and Filter Hotels and Flights ##########
@@ -755,7 +764,7 @@ def get_all_return_flight(all_flight_expedia_re,all_flight_hotwire_re,all_flight
     return flight_list_re
 
 
-# In[96]:
+# In[155]:
 
 
 # Combine all hotel info
@@ -781,11 +790,11 @@ def get_all_hotels(hotel_airbnb,hotel_booking):
     return hotel_list
 
 
-# In[97]:
+# In[156]:
 
 
 # Combine flights and hotels, then generate qualified packages.
-def possible_package(departflights,returnflights,hotels):
+def possible_package(departflights,returnflights,hotels,budget):
     packages = []
     for i in departflights:
         for j in returnflights:
@@ -796,7 +805,7 @@ def possible_package(departflights,returnflights,hotels):
     return packages
 
 # Priceline only offer total, so we generate a special function for Priceline
-def priceline_package(departflights,returnflights,hotels):
+def priceline_package(departflights,returnflights,hotels,budget):
     packages = []
     for i in range(len(departflights)):
             for h in hotels:
@@ -806,7 +815,7 @@ def priceline_package(departflights,returnflights,hotels):
     return packages
 
 
-# In[108]:
+# In[157]:
 
 
 ########## STEP 5 Sorting #########
@@ -832,7 +841,7 @@ def normalization(df,m=1): #m=1=>(x-min)/(max-min); m=0 =>(max-x)/(max-min)
         return df.apply(lambda x: (mx-x)/(mx-mn))
 
 
-# In[134]:
+# In[158]:
 
 
 def generate_packages(passenger_info,sort = 0):
@@ -853,15 +862,15 @@ def generate_packages(passenger_info,sort = 0):
     all_flight_hotwire = get_flight_hotwire(arrival,arrival_country,arrival_code,departure,depart_code,depart_country,start_time,end_time,people,budget)
     all_flight_hotwire_re = get_flight_hotwire_re(arrival,arrival_country,arrival_code,departure,depart_code,depart_country,start_time,end_time,people,budget)
     all_flight_priceline,all_flight_priceline_re = get_flight_priceline(arrival_code,depart_code,start_time,end_time,people,budget)
-    all_flight_hipmunk = get_flight_hipmunk(departure,arrival,start_time,end_time)
-    all_flight_hipmunk_re = get_flight_hipmunk_re(departure,arrival,start_time,end_time)
+    all_flight_hipmunk = get_flight_hipmunk(departure,arrival,start_time,end_time,budget)
+    all_flight_hipmunk_re = get_flight_hipmunk_re(departure,arrival,start_time,end_time,budget)
     hotel_airbnb = get_airbnb_list(arrival,people,children,start_time[2]+'-'+start_time[0]+'-'+start_time[1],end_time[2]+'-'+end_time[0]+'-'+end_time[1],budget)
     hotel_booking = get_booking_list(arrival,int(people),int(children),
                                      start_time[2]+'-'+start_time[0]+'-'+start_time[1],
                                      end_time[2]+'-'+end_time[0]+'-'+end_time[1],budget)
     all_packages = possible_package(get_all_depart_flight(all_flight_expedia,all_flight_hotwire,all_flight_hipmunk),
                                     get_all_return_flight(all_flight_expedia_re,all_flight_hotwire_re,all_flight_hipmunk_re),
-                                    get_all_hotels(hotel_airbnb,hotel_booking)) + priceline_package(all_flight_priceline,all_flight_priceline_re,get_all_hotels(hotel_airbnb,hotel_booking))
+                                    get_all_hotels(hotel_airbnb,hotel_booking),budget) + priceline_package(all_flight_priceline,all_flight_priceline_re,get_all_hotels(hotel_airbnb,hotel_booking),budget)
 #     except NameError:
 #         print("There's something wrong with expedia.com. Please try agin after several minutes.")
               
@@ -903,7 +912,7 @@ def generate_packages(passenger_info,sort = 0):
   
 
 
-# In[117]:
+# In[159]:
 
 
 ###################### THIS IS THE INPUT #######################
@@ -920,7 +929,7 @@ def generate_packages(passenger_info,sort = 0):
 # sort = int(input('Please input the sorting method(0:by price,1:by rating,2:by recommendation):'))
 
 
-# In[128]:
+# In[160]:
 
 
 # For now, we take input as following for instance.
@@ -928,7 +937,7 @@ passenger_info = ['New York','United States of America','NYC','Paris','France','
 sort = 2
 
 
-# In[132]:
+# In[162]:
 
 
 ################### Now we can generate packages by running this code only ####################
@@ -939,7 +948,7 @@ results = generate_packages(passenger_info,sort)
 # Information includes departure city, destination, travel duration, budget.....
 
 
-# In[142]:
+# In[163]:
 
 
 # Show the output dataframe
@@ -948,7 +957,7 @@ results
 # The results screenshot is on Github.
 
 
-# In[136]:
+# In[127]:
 
 
 # Write to csv
@@ -956,11 +965,11 @@ results
 results.to_csv("NYCPAR2019021420190221.csv")
 
 
-# In[140]:
+# In[128]:
 
 
 # Since the dataframe is too long, we want a simplified version.
-def print_result(result_df,packages_num=20):
+def print_result(result_df,packages_num=10):
     from prettytable import PrettyTable
     x= PrettyTable(["Pkg#", "Price","Out Flight", "Return Flight","Hotel Name","Rating","Review#"])
     for index in range(packages_num):
@@ -969,7 +978,7 @@ def print_result(result_df,packages_num=20):
     print(x)
 
 
-# In[143]:
+# In[164]:
 
 
 # This is a more readable and simplified result.
