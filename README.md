@@ -1,4 +1,4 @@
-# tools-group-project README
+#  Flight + Hotel Travel Package Recommendation System README
 ### Description of the project:
 The goal of the project is to build a personalized recommendation system helping people who is planning travels find the best travel package consist of hotels and flights. The customer can input the place of departure, destination, start date, end date and budget, and the recommendation system can provide sorted travel packages including departure flght, return flight and hotel. There are 3 diffenrent ranking criterion when sorting travel packages which are total price of the package (1), rating of the hotel (2) and recommendation score (3).
 
